@@ -9,6 +9,7 @@ from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
     BinarySensorDeviceClass,
 )
+import logging
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -44,9 +45,10 @@ async def async_ping(host: str, timeout: float = 1.0) -> bool:
 
 class PingCoordinator(DataUpdateCoordinator):
     def __init__(self, hass: HomeAssistant, devices: list[dict[str, Any]], interval: int):
+        LOGGER = logging.getLogger(__name__)
         super().__init__(
             hass,
-            _LOGGER := hass.logger,
+            LOGGER,
             name="availability_checker",
             update_interval=timedelta(seconds=interval),
         )
