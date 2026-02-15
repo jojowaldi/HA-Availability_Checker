@@ -11,6 +11,11 @@ async def async_setup_entry(hass: HomeAssistant, entry) -> bool:
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = entry
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+    async def _async_reload_entry(hass: HomeAssistant, entry) -> None:
+        await hass.config_entries.async_reload(entry.entry_id)
+
+    entry.add_update_listener(_async_reload_entry)
     return True
 
 
