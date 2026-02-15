@@ -26,34 +26,22 @@ class AvailabilityCheckerConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 class OptionsFlowHandler(config_entries.OptionsFlow):
     def __init__(self, config_entry):
-        self.config_entry = config_entry
+        self._config_entry = config_entry
         self._devices = list(config_entry.options.get(CONF_DEVICES, []))
 
     async def async_step_init(self, user_input: dict | None = None):
-        return await self.async_step_manage()
+        """Manage options: add a device (name + host)."""
+        schema = vol.Schema(
+            {
+                vol.Required("name"): str,
+                vol.Required("host"): str,
+            }
+        )
 
-    async def async_step_manage(self, user_input: dict | None = None):
-        schema = vol.Schema({
-            vol.Optional("name"): str,
-            vol.Optional("host"): str,
-        })
+        if user_input is None:
+            return self.async_show_form(step_id="init", data_schema=schema)
 
-        if user_input is not None:
-            name = user_input.get("name")
-            host = user_input.get("host")
-            if name and host:
-                self._devices.append({"name": name, "host": host})
-                return await self._show_manage()
-            return await self._finish()
-
-        return await self._show_manage()
-
-    async def _show_manage(self):
-        description = {"devices": self._devices}
-        return self.async_show_form(step_id="manage", data_schema=vol.Schema({
-            vol.Optional("name", default=""): str,
-            vol.Optional("host", default=""): str,
-        }), description_placeholders={"devices": str(self._devices)})
-
-    async def _finish(self):
+        name = user_input["name"]
+        host = user_input["host"]
+        self._devices.append({"name": name, "host": host})
         return self.async_create_entry(title="devices", data={CONF_DEVICES: self._devices})
