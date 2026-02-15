@@ -7,7 +7,7 @@ from typing import Any
 
 from homeassistant.components.binary_sensor import (
     BinarySensorEntity,
-    DEVICE_CLASS_CONNECTIVITY,
+    BinarySensorDeviceClass,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
@@ -87,7 +87,7 @@ class PingBinarySensor(BinarySensorEntity):
         self._device = device
         self._attr_name = device.get("name")
         self._attr_unique_id = f"{entry.entry_id}_{device.get('host')}"
-        self._attr_device_class = DEVICE_CLASS_CONNECTIVITY
+        self._attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
 
     @property
     def is_on(self) -> bool | None:
