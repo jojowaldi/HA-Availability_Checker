@@ -1,0 +1,10 @@
+{
+  "domain": "availability_checker",
+  "name": "Availability Checker",
+  "version": "0.1.0",
+  "documentation": "https://github.com/jojowaldi/HA-Availability_Checker",
+  "issue_tracker": "https://github.com/jojowaldi/HA-Availability_Checker/issues",
+  "requirements": [""],
+  "codeowners": ["@jojowaldi"],
+  "config_flow": true
+}
